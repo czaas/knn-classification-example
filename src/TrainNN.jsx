@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FileUploader } from "@mbkit/file-uploader";
 import { Input } from "@mbkit/input";
@@ -6,7 +6,16 @@ import { Label } from "@mbkit/label";
 import { Button } from "@mbkit/button";
 import { AppContext } from "./app";
 import * as tf from "@tensorflow/tfjs";
+import Tensorset from "tensorset/lib/Tensorset";
 import "regenerator-runtime/runtime.js";
+
+function download(content, fileName, contentType) {
+  var a = document.createElement("a");
+  var file = new Blob([content], { type: contentType });
+  a.href = URL.createObjectURL(file);
+  a.download = fileName;
+  a.click();
+}
 
 // returns a 2d tensor
 //   part1             part2,...
@@ -40,11 +49,32 @@ export function TrainNeuralNetwork() {
   }, [file]);
   function validateFileData() {
     const reader = new FileReader();
-    reader.onload = (event) => {
+    reader.onload = async (event) => {
       try {
+        console.log("file name", file.name);
         const jsonString = event.target.result;
-        const json = JSON.parse(jsonString);
-        setData(json.map(convertKeyPointsToArray));
+
+        // const json = JSON.parse(jsonString);
+        // console.log(json);
+        if (file.name.includes("nn")) {
+          // uploading already trained model
+          console.log("uploading pretrained model");
+          console.log(jsonString);
+          const dataSet = await Tensorset.parse(jsonString);
+          nn.setClassifierDataset(dataSet);
+          console.log(dataSet);
+          const newPoses = [];
+          Object.keys(dataSet).map((key) => {
+            if (!availablePoses.includes(key)) {
+              newPoses.push(key);
+            }
+          });
+          setAvailablePoses([...availablePoses, ...newPoses]);
+        } else {
+          // uploading a particular formatted
+          const json = JSON.parse(jsonString);
+          setData(json.map(convertKeyPointsToArray));
+        }
       } catch (e) {
         setError(e);
       }
@@ -54,13 +84,9 @@ export function TrainNeuralNetwork() {
 
   function handleTrainData() {
     setTraining(true);
-    // normalize the data
-
-    console.log(data);
     data.map((pose) => {
       const tensor = tf.tensor(pose);
       nn.addExample(tensor, classificationLabel);
-      // console.log(pose);
     });
     const poseAlreadyExists = availablePoses.find(
       (poseLabel) => poseLabel === classificationLabel
@@ -78,8 +104,14 @@ export function TrainNeuralNetwork() {
     });
     reset();
   }
-  function saveDataSet() {
-    console.log(nn.getClassifierDataset());
+
+  async function saveDataSet() {
+    console.log("saving!");
+    const dataSet = nn.getClassifierDataset();
+    // console.log(dataSet);
+    const stringifiedDataSet = await Tensorset.stringify(dataSet);
+    // console.log(stringifiedDataSet);
+    download(stringifiedDataSet, "nn.model.json", "application/json");
   }
   function reset() {
     setData([]);
