@@ -23,7 +23,7 @@ function App() {
           <nav style={{ display: "flex", gap: 8 }}>
             <Link to="/">Home</Link>
             <Link to="/train-nn">Add data for classification</Link>
-            <Link to="/webcam">test already added classification poses</Link>
+            <Link to="/webcam">Test Workouts</Link>
           </nav>
 
           <Switch>
