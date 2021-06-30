@@ -1,0 +1,14 @@
+.videoCanvasContainer {
+  position: relative;
+  width: 1280px;
+  height: 720px;
+}
+.videoCanvasContainer video,
+.videoCanvasContainer canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: scaleX(-1);
+}

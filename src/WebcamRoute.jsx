@@ -28,7 +28,8 @@ export function WebcamRoute() {
 
   const { reps, nextExpectedPose } = useRepetition({
     pose: prediction,
-    poseList: ["standing", "squatting", "standing"],
+    // poseList: ["standing", "squatting", "standing"],
+    poseList: ["pushup", "pushdown", "pushup"],
   });
 
   return (

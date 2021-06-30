@@ -6,6 +6,7 @@ import { WebcamRoute } from "./WebcamRoute";
 import * as tf from "@tensorflow/tfjs";
 import * as mobilenetModule from "@tensorflow-models/mobilenet";
 import * as knnClassifier from "@tensorflow-models/knn-classifier";
+import { CollectAndEditData } from "./CollectAndEditData";
 
 export const AppContext = createContext({});
 
@@ -22,7 +23,8 @@ function App() {
         <Router>
           <nav style={{ display: "flex", gap: 8 }}>
             <Link to="/">Home</Link>
-            <Link to="/train-nn">Add data for classification</Link>
+            <Link to="/collect-data">Collect and edit data</Link>
+            <Link to="/train-nn">Train or Upload Neural Network</Link>
             <Link to="/webcam">Test Workouts</Link>
           </nav>
 
@@ -35,6 +37,9 @@ function App() {
             </Route>
             <Route path="/webcam">
               <WebcamRoute />
+            </Route>
+            <Route path="/collect-data">
+              <CollectAndEditData />
             </Route>
             <Route>
               <h1>Not found</h1>

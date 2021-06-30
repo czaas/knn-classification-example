@@ -56,7 +56,7 @@ export function TrainNeuralNetwork() {
 
         // const json = JSON.parse(jsonString);
         // console.log(json);
-        if (file.name.includes("nn")) {
+        if (file.name.includes("model")) {
           // uploading already trained model
           console.log("uploading pretrained model");
           const dataSet = await Tensorset.parse(jsonString);
