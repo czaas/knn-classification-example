@@ -58,6 +58,7 @@ export function TrainNeuralNetwork() {
         if (file.name.includes("model")) {
           // uploading already trained model
           console.log("uploading pretrained model");
+          console.log(jsonString);
           const dataSet = await Tensorset.parse(jsonString);
           nn.setClassifierDataset(dataSet);
           const newPoses = [];

@@ -12,3 +12,9 @@
   height: 100%;
   transform: scaleX(-1);
 }
+.exercises {
+  display: flex;
+  gap: 30px;
+  font-size: 40px;
+  list-style: none;
+}
