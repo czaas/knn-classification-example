@@ -30,6 +30,7 @@ export function useRepetition(props) {
       //   console.log(
       //     `Matching! currentPoseIndex: ${currentPoseIndex}, list length: ${poseList.length}`
       //   );
+
       // if there is no next pose and pose index plus one is equal
       // to the length of props.poseList then update the rep count
       if (currentPoseIndex + 1 === poseList.length) {
@@ -41,7 +42,7 @@ export function useRepetition(props) {
     } else if (restartOnFailure) {
       resetPoseCount();
     }
-  }, [pose]);
+  }, [pose, poseList]);
 
   function resetPoseCount() {
     // if the last pose is the same as the first pose,
