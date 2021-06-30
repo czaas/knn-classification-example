@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import "@tensorflow/tfjs-backend-webgl";
 import { AppContext } from "./app";
 import { WebcamPose } from "./Components/WebcamPose";
 import { convertKeyPointsToArray } from "./TrainNN";

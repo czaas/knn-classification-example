@@ -3,8 +3,7 @@ import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import { TrainNeuralNetwork } from "./TrainNN";
 import { WebcamRoute } from "./WebcamRoute";
-import * as tf from "@tensorflow/tfjs";
-import * as mobilenetModule from "@tensorflow-models/mobilenet";
+import "regenerator-runtime/runtime";
 import * as knnClassifier from "@tensorflow-models/knn-classifier";
 import { CollectAndEditData } from "./CollectAndEditData";
 

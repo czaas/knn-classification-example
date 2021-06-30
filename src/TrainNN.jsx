@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FileUploader } from "@mbkit/file-uploader";
 import { Input } from "@mbkit/input";
@@ -6,7 +6,7 @@ import { Label } from "@mbkit/label";
 import { Button } from "@mbkit/button";
 import { AppContext } from "./app";
 import * as tf from "@tensorflow/tfjs";
-import Tensorset from "tensorset/lib/Tensorset";
+import { Tensorset } from "./Components/Tensornet";
 import "regenerator-runtime/runtime.js";
 
 function download(content, fileName, contentType) {
@@ -26,13 +26,12 @@ export function convertKeyPointsToArray(pose) {
 }
 
 export function TrainNeuralNetwork() {
-  const { nn, availablePoses, setAvailablePoses } =
-    React.useContext(AppContext);
-  const [file, setFile] = React.useState();
-  const [data, setData] = React.useState([]);
-  const [error, setError] = React.useState(null);
-  const [classificationLabel, setClassificationLabel] = React.useState("");
-  const [training, setTraining] = React.useState(false);
+  const { nn, availablePoses, setAvailablePoses } = useContext(AppContext);
+  const [file, setFile] = useState();
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
+  const [classificationLabel, setClassificationLabel] = useState("");
+  const [training, setTraining] = useState(false);
 
   function handleFileUpload(e) {
     const file = e.target.files[0];
@@ -42,7 +41,7 @@ export function TrainNeuralNetwork() {
       setClassificationLabel("");
     }
   }
-  React.useEffect(() => {
+  useEffect(() => {
     if (file) {
       validateFileData();
     }
