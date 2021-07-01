@@ -24,6 +24,8 @@ export function WebcamRoute() {
 
   const [prediction, setPrediction] = useState("");
   async function handlePose(keypoints) {
+    // console.log(nn.getClassExampleCount());
+    // console.log(nn.getClassifierDataset());
     // check that the model has trained classes
     const classCount = nn.getClassExampleCount();
     if (Object.keys(classCount).length < 1) {
@@ -53,7 +55,9 @@ export function WebcamRoute() {
   }
 
   useEffect(() => {
-    pretrainNeuralNetwork();
+    if (Object.keys(nn.getClassExampleCount()).length === 0) {
+      pretrainNeuralNetwork();
+    }
   }, []);
   async function pretrainNeuralNetwork() {
     // Tensornet expects stringified JSON in order to parse it
@@ -61,7 +65,12 @@ export function WebcamRoute() {
 
     const combinedSets = await Tensorset.parse(combinedJson);
 
-    nn.setClassifierDataset(combinedSets);
+    const existingDataSet = nn.getClassifierDataset();
+    console.log(existingDataSet, combinedSets);
+    const mergedWithExistingDatas = { ...combinedSets, ...existingDataSet };
+    console.log(mergedWithExistingDatas);
+
+    nn.setClassifierDataset(mergedWithExistingDatas);
 
     const newPoses = [];
     Object.keys(combinedSets).map((key) => {

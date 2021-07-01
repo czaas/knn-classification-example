@@ -7,6 +7,7 @@ import { Button } from "@mbkit/button";
 import { AppContext } from "./app";
 import * as tf from "@tensorflow/tfjs";
 import { Tensorset } from "./Components/Tensornet";
+import * as knnClassifier from "@tensorflow-models/knn-classifier";
 import "regenerator-runtime/runtime.js";
 
 function download(content, fileName, contentType) {
@@ -81,10 +82,16 @@ export function TrainNeuralNetwork() {
   }
 
   function handleTrainData() {
+    const newNn = knnClassifier.create();
     setTraining(true);
+    // create new knn
+    // add examples,
+    // get data set from new and og
+    // merge them
+    // set og data set
     data.map((pose) => {
       const tensor = tf.tensor(pose);
-      nn.addExample(tensor, classificationLabel);
+      newNn.addExample(tensor, classificationLabel);
     });
     const poseAlreadyExists = availablePoses.find(
       (poseLabel) => poseLabel === classificationLabel
@@ -92,6 +99,15 @@ export function TrainNeuralNetwork() {
     if (!poseAlreadyExists) {
       setAvailablePoses([...availablePoses, classificationLabel]);
     }
+    const newDataSet = newNn.getClassifierDataset();
+    const ogDataSet = nn.getClassifierDataset();
+    // TODO need to handle merging same name data sets
+    const mergedDataSet = {
+      ...newDataSet,
+      ...ogDataSet,
+    };
+    nn.setClassifierDataset(mergedDataSet);
+    // newNn.dispose();
     reset();
   }
   function handleTestData() {
