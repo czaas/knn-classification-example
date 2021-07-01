@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 
-// const exampleConfig = {
-//   poseList: ["standing", "squatting", "standing"],
-//   restartOnFailure: true,
-//   pose: "standing",
-// };
+const exampleConfig = {
+  // the poses the user needs to do to count as one rep
+  poseList: ["standing", "squatting", "standing"],
+  // string of current pose provided by passing posenet data into trained KNN model
+  pose: "standing",
+  // currently not used: would be used if someone interuppted a complext workout (burpee) and they would need to restart to get one rep
+  restartOnFailure: true,
+};
 export function useRepetition(props) {
   const { poseList = [], restartOnFailure = false, pose = "" } = props;
 

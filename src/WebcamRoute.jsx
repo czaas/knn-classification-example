@@ -7,13 +7,15 @@ import * as tf from "@tensorflow/tfjs";
 import { useRepetition } from "./Components/useRepetition";
 import { Tensorset } from "./Components/Tensornet";
 import pushupJson from "./poses/pushups.model.json";
+import jumpingJacksJson from "./poses/jumping-jacks.model.json";
 import squatsJson from "./poses/squats.model.json";
 import "./Styles.module.css";
 
 // what constitues one rep?
 const workoutInstructions = {
-  pushups: ["pushup", "pushdown", "pushup"],
+  ["jumping jacks"]: ["standing", "jumping-jack", "standing"],
   squats: ["standing", "squatting", "standing"],
+  pushups: ["pushup", "pushdown", "pushup"],
 };
 
 const workoutTitles = Object.keys(workoutInstructions);
@@ -36,7 +38,7 @@ export function WebcamRoute() {
     const converted = convertKeyPointsToArray({ poses: { keypoints } });
     const tensor = tf.tensor(converted);
     const prediction = await nn.predictClass(tensor);
-    // console.log(prediction);
+    console.log(prediction);
     if (prediction.confidences[prediction.label] > 0.9) {
       setPrediction(prediction.label);
     }
@@ -61,14 +63,18 @@ export function WebcamRoute() {
   }, []);
   async function pretrainNeuralNetwork() {
     // Tensornet expects stringified JSON in order to parse it
-    const combinedJson = JSON.stringify([...pushupJson, ...squatsJson]);
+    const combinedJson = JSON.stringify([
+      ...pushupJson,
+      ...squatsJson,
+      ...jumpingJacksJson,
+    ]);
 
     const combinedSets = await Tensorset.parse(combinedJson);
 
     const existingDataSet = nn.getClassifierDataset();
-    console.log(existingDataSet, combinedSets);
+    // console.log(existingDataSet, combinedSets);
     const mergedWithExistingDatas = { ...combinedSets, ...existingDataSet };
-    console.log(mergedWithExistingDatas);
+    // console.log(mergedWithExistingDatas);
 
     nn.setClassifierDataset(mergedWithExistingDatas);
 
