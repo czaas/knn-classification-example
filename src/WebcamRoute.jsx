@@ -101,8 +101,12 @@ export function WebcamRoute() {
             <li>Expected: {nextExpectedPose}</li>
             <li>Count: {reps}</li>
           </ul> */}
-          <div className="instruction">Do 10 {workoutType}</div>
-          <div className="repCount">{reps}</div>
+          {reps >= 10 ? null : (
+            <div className="instruction">Do 10 {workoutType}</div>
+          )}
+          <div className="repCount" onClick={reset}>
+            {reps >= 10 ? "🎉" : reps}
+          </div>
           {/* <form>
             {workoutTitles.map((title) => (
               <label key={title}>
@@ -119,7 +123,10 @@ export function WebcamRoute() {
           </form> */}
         </>
       ) : (
-        <p>Warming up</p>
+        <div className="warmUpIndicator">
+          Warming up.
+          <br /> Get your whole body in frame.
+        </div>
       )}
       <WebcamPose onPose={handlePose} />
     </main>
