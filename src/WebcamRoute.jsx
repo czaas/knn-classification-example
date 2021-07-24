@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import "@tensorflow/tfjs-backend-webgl";
 import { AppContext } from "./app";
 import { WebcamPose } from "./Components/WebcamPose";
 import { convertKeyPointsToArray } from "./TrainNN";
@@ -94,15 +93,17 @@ export function WebcamRoute() {
   }, [prediction]);
 
   return (
-    <>
+    <main className="webcamRouteContainer">
       {ready ? (
         <>
-          <ul className="exercises">
+          {/* <ul className="exercises">
             <li>Current: {prediction}</li>
             <li>Expected: {nextExpectedPose}</li>
             <li>Count: {reps}</li>
-          </ul>
-          <form>
+          </ul> */}
+          <div className="instruction">Do 10 {workoutType}</div>
+          <div className="repCount">{reps}</div>
+          {/* <form>
             {workoutTitles.map((title) => (
               <label key={title}>
                 <input
@@ -115,15 +116,12 @@ export function WebcamRoute() {
                 {title}
               </label>
             ))}
-          </form>
+          </form> */}
         </>
       ) : (
-        <p>
-          Warming up the data. Make sure your whole body is in frame. Workouts
-          should be ready to select from soon.
-        </p>
+        <p>Warming up</p>
       )}
       <WebcamPose onPose={handlePose} />
-    </>
+    </main>
   );
 }

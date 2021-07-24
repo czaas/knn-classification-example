@@ -18,3 +18,36 @@
   font-size: 40px;
   list-style: none;
 }
+
+.webcamRouteContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  color: #fff;
+  z-index: -2;
+}
+.webcamRouteContainer video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+.webcamRouteContainer .instruction,
+.webcamRouteContainer .repCount {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  max-width: 50%;
+  background: rgba(0, 0, 0, 0.75);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 3rem;
+  z-index: 10;
+}
+.webcamRouteContainer .repCount {
+  left: initial;
+  right: 16px;
+}

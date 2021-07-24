@@ -13,6 +13,7 @@ export function CollectAndEditData() {
   const [allData, setAllData] = useState({});
 
   function handlePose(keypoints) {
+    console.log(keypoints);
     if (mainCanvas.current) {
       drawPose(keypoints, mainCanvas.current);
       setCurrentKeypoints(keypoints);

@@ -1,4 +1,7 @@
 import React, { useEffect, useRef } from "react";
+import "@tensorflow/tfjs-core";
+import "@tensorflow/tfjs-converter";
+import "@tensorflow/tfjs-backend-webgl";
 import * as poseDetection from "@tensorflow-models/pose-detection";
 
 export function WebcamPose(props) {
@@ -11,10 +14,7 @@ export function WebcamPose(props) {
   async function createDetector() {
     const d = await poseDetection.createDetector(
       poseDetection.SupportedModels.BlazePose,
-      {
-        runtime: "tfjs",
-        modelType: "heavy",
-      }
+      { runtime: "tfjs" }
     );
     detector.current = d;
     activateWebcam();
@@ -41,12 +41,14 @@ export function WebcamPose(props) {
       return;
     }
     const poses = await detector.current.estimatePoses(video.current);
+    console.log(poses);
     const pose = poses[0];
     if (pose) {
       const { score, keypoints } = pose;
-      if (score > 0.9) {
-        onPose(keypoints);
-      }
+      // console.log(pose);
+      // if (score > 0.9) {
+      onPose(keypoints);
+      // }
     }
     setTimeout(() => {
       requestAnimationFrame(predictWebcam);
