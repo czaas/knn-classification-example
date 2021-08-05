@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { WebcamPose } from "./Components/WebcamPose";
 import { drawPose } from "./utils/drawing";
+import { FileUploader } from "@mbkit/file-uploader";
 import "./Styles.module.css";
 
 const tempData = {};
@@ -128,8 +129,55 @@ export function CollectAndEditData() {
     clearPlaybackCanvas();
   }
 
+  const [fileName, setFileName] = useState("");
+  const [fileError, setFileError] = useState("");
+  function handleFileUpload(e) {
+    const files = Array.from(e.target.files);
+    console.log(files);
+    const jsonFiles = [];
+    files.forEach((file) => {
+      if (file.type === "application/json") {
+        jsonFiles.push(file);
+        validateFileData(file);
+      }
+    });
+    const name = jsonFiles
+      .map((file, i) => `${file.name}${i === jsonFiles.length - 1 ? "" : ", "}`)
+      .join("");
+    setFileName(name);
+  }
+  function validateFileData(file) {
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      try {
+        console.log("file name", file.name);
+        const jsonString = event.target.result;
+
+        if (file.name.includes("poses")) {
+          // uploading already trained model
+          console.log("uploading poses");
+          // console.log(jsonString);
+          const data = JSON.parse(jsonString);
+          tempData[`${file.name}${new Date().toISOString()}`] = data;
+
+          setAllData(tempData);
+        }
+      } catch (e) {
+        console.log(e);
+        setFileError(e.message);
+      }
+    };
+    reader.readAsText(file);
+  }
+
   return (
     <>
+      <FileUploader
+        onChange={handleFileUpload}
+        value={fileName}
+        invalid={fileError}
+        multiple
+      />
       <button
         onClick={startCollectingData}
         disabled={dataLabel.trim() !== "" || isEditing}
